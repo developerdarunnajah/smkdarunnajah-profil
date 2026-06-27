@@ -1,66 +1,135 @@
-// src/App.tsx
-
+// src/react-app/App.tsx
 import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import cloudflareLogo from "./assets/Cloudflare_Logo.svg";
-import honoLogo from "./assets/hono.svg";
 import "./App.css";
 
-function App() {
-	const [count, setCount] = useState(0);
-	const [name, setName] = useState("unknown");
+// Import halaman-halaman dari folder halaman
+import Beranda from "./halaman/Beranda";
+import Profil from "./halaman/Profil";
+import ProgramKeahlian from "./halaman/ProgramKeahlian";
+import Berita from "./halaman/Berita";
+import Galeri from "./halaman/Galeri"; // <-- Import Halaman Galeri Baru
+import Ppdb from "./halaman/Ppdb";
+import Kontak from "./halaman/Kontak";
 
-	return (
-		<>
-			<div>
-				<a href="https://vite.dev" target="_blank">
-					<img src={viteLogo} className="logo" alt="Vite logo" />
-				</a>
-				<a href="https://react.dev" target="_blank">
-					<img src={reactLogo} className="logo react" alt="React logo" />
-				</a>
-				<a href="https://hono.dev/" target="_blank">
-					<img src={honoLogo} className="logo cloudflare" alt="Hono logo" />
-				</a>
-				<a href="https://workers.cloudflare.com/" target="_blank">
-					<img
-						src={cloudflareLogo}
-						className="logo cloudflare"
-						alt="Cloudflare logo"
-					/>
-				</a>
-			</div>
-			<h1>Vite + React + Hono + Cloudflare</h1>
-			<div className="card">
-				<button
-					onClick={() => setCount((count) => count + 1)}
-					aria-label="increment"
-				>
-					count is {count}
-				</button>
-				<p>
-					Edit <code>src/App.tsx</code> and save to test HMR
-				</p>
-			</div>
-			<div className="card">
-				<button
-					onClick={() => {
-						fetch("/api/")
-							.then((res) => res.json() as Promise<{ name: string }>)
-							.then((data) => setName(data.name));
-					}}
-					aria-label="get name"
-				>
-					Name from API is: {name}
-				</button>
-				<p>
-					Edit <code>worker/index.ts</code> to change the name
-				</p>
-			</div>
-			<p className="read-the-docs">Click on the logos to learn more</p>
-		</>
-	);
+function App() {
+  const [halamanAktif, setHalamanAktif] = useState<string>("beranda");
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
+
+  const navigasiKe = (halaman: string) => {
+    setHalamanAktif(halaman);
+    setIsMobileMenuOpen(false);
+  };
+
+  const renderKontenHalaman = () => {
+    switch (halamanAktif) {
+      case "beranda":
+        return <Beranda setHalaman={navigasiKe} />;
+      case "profil":
+        return <Profil />;
+      case "jurusan":
+        return <ProgramKeahlian />;
+      case "berita":
+        return <Berita />;
+      case "galeri": // <-- Route untuk halaman galeri
+        return <Galeri />;
+      case "ppdb":
+        return <Ppdb />;
+      case "kontak":
+        return <Kontak />;
+      default:
+        return <Beranda setHalaman={navigasiKe} />;
+    }
+  };
+
+  return (
+    <div className="app-container">
+      <nav className="navbar">
+        <div className="logo-container" style={{ cursor: "pointer" }} onClick={() => navigasiKe("beranda")}>
+          <h1 className="logo-text">SMKS DARUN NAJAH</h1>
+        </div>
+
+        <div className="hamburger-menu" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+          <span className={`bar ${isMobileMenuOpen ? "open" : ""}`}></span>
+          <span className={`bar ${isMobileMenuOpen ? "open" : ""}`}></span>
+          <span className={`bar ${isMobileMenuOpen ? "open" : ""}`}></span>
+        </div>
+
+        <ul className={`nav-links ${isMobileMenuOpen ? "sidebar-aktif" : ""}`}>
+          <li>
+            <button onClick={() => navigasiKe("beranda")} className={`nav-btn ${halamanAktif === "beranda" ? "active" : ""}`}>
+              Beranda
+            </button>
+          </li>
+          <li>
+            <button onClick={() => navigasiKe("profil")} className={`nav-btn ${halamanAktif === "profil" ? "active" : ""}`}>
+              Profil
+            </button>
+          </li>
+          <li>
+            <button onClick={() => navigasiKe("jurusan")} className={`nav-btn ${halamanAktif === "jurusan" ? "active" : ""}`}>
+              Program Keahlian
+            </button>
+          </li>
+          <li>
+            <button onClick={() => navigasiKe("berita")} className={`nav-btn ${halamanAktif === "berita" ? "active" : ""}`}>
+              Berita
+            </button>
+          </li>
+          {/* Tombol Galeri diletakkan di samping Berita */}
+          <li>
+            <button onClick={() => navigasiKe("galeri")} className={`nav-btn ${halamanAktif === "galeri" ? "active" : ""}`}>
+              Galeri
+            </button>
+          </li>
+          <li>
+            <button onClick={() => navigasiKe("ppdb")} className={`nav-btn ${halamanAktif === "ppdb" ? "active" : ""}`}>
+              PPDB
+            </button>
+          </li>
+          <li>
+            <button onClick={() => navigasiKe("kontak")} className={`nav-btn ${halamanAktif === "kontak" ? "active" : ""}`}>
+              Kontak
+            </button>
+          </li>
+        </ul>
+      </nav>
+
+      {isMobileMenuOpen && (
+        <div className="sidebar-overlay" onClick={() => setIsMobileMenuOpen(false)}></div>
+      )}
+
+      <main style={{ minHeight: "75vh" }}>
+        {renderKontenHalaman()}
+      </main>
+
+      <footer className="footer">
+        <div className="footer-grid">
+          <div className="footer-about">
+            <h3>SMKS DARUN NAJAH</h3>
+            <p>Lembaga pendidikan kejuruan yang mengedepankan kualitas keterampilan vokasi teknis dan nilai moralitas religius islami.</p>
+          </div>
+          <div className="footer-contact">
+            <h3>Hubungi Kami</h3>
+            <p>📍 Jl. Pendidikan No. 1, Kompleks Darun Najah</p>
+            <p>📞 Hub: (0123) 456789</p>
+            <p>✉️ Email: info@smksdarunnajah.sch.id</p>
+          </div>
+          <div className="footer-links">
+            <h3>Tautan Navigasi</h3>
+            <ul style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+              <li><button onClick={() => navigasiKe("beranda")} className="footer-link-btn">Beranda Utama</button></li>
+              <li><button onClick={() => navigasiKe("profil")} className="footer-link-btn">Profil Sekolah</button></li>
+              <li><button onClick={() => navigasiKe("galeri")} className="footer-link-btn">Galeri Kegiatan</button></li>
+              <li><button onClick={() => navigasiKe("ppdb")} className="footer-link-btn">PPDB Online</button></li>
+            </ul>
+          </div>
+        </div>
+        <div className="footer-bottom">
+          <p>&copy; {new Date().getFullYear()} SMKS Darun Najah. Ditenagai oleh React & Cloudflare.</p>
+        </div>
+      </footer>
+    </div>
+  );
 }
 
 export default App;
