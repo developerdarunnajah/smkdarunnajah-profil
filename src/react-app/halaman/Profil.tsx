@@ -10,7 +10,7 @@ const Profil: React.FC = () => {
       
       <div className="sambutan-content" style={{ marginBottom: "50px" }}>
         <div className="foto-placeholder">
-          <span>[Foto Kepala Sekolah]</span>
+          <img src="/api/assets/galeri/bukhal.jpeg" alt="Kepala Sekolah" style={{ width: "100%", height: "auto", borderRadius: "8px" }} />
         </div>
         <div className="teks-sambutan">
           <h3>Sambutan Kepala Sekolah</h3>

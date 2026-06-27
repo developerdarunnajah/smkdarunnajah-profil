@@ -110,22 +110,22 @@ function App() {
           </div>
           <div className="footer-contact">
             <h3>Hubungi Kami</h3>
-            <p>📍 Jl. Pendidikan No. 1, Kompleks Darun Najah</p>
-            <p>📞 Hub: (0123) 456789</p>
-            <p>✉️ Email: info@smksdarunnajah.sch.id</p>
+            <p> Jl. KH Musthofa No 05 Desa Petahunan Kecamatan Sumbersuko Lumajang</p>
+            <p>WA : 08123456789</p>
+            <p>Email: smkdanalmj@gmail.com</p>
           </div>
           <div className="footer-links">
             <h3>Tautan Navigasi</h3>
             <ul style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-              <li><button onClick={() => navigasiKe("beranda")} className="footer-link-btn">Beranda Utama</button></li>
-              <li><button onClick={() => navigasiKe("profil")} className="footer-link-btn">Profil Sekolah</button></li>
-              <li><button onClick={() => navigasiKe("galeri")} className="footer-link-btn">Galeri Kegiatan</button></li>
-              <li><button onClick={() => navigasiKe("ppdb")} className="footer-link-btn">PPDB Online</button></li>
+              <li><button onClick={() => navigasiKe("beranda")} className="footer-link-btn">Beranda</button></li>
+              <li><button onClick={() => navigasiKe("profil")} className="footer-link-btn">Profil</button></li>
+              <li><button onClick={() => navigasiKe("galeri")} className="footer-link-btn">Galeri</button></li>
+              <li><button onClick={() => navigasiKe("ppdb")} className="footer-link-btn">PPDB</button></li>
             </ul>
           </div>
         </div>
         <div className="footer-bottom">
-          <p>&copy; {new Date().getFullYear()} SMKS Darun Najah. Ditenagai oleh React & Cloudflare.</p>
+          <p>&copy; {new Date().getFullYear()} SMKS Darun Najah.</p>
         </div>
       </footer>
     </div>
