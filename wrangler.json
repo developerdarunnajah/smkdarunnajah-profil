@@ -18,13 +18,5 @@
       "bucket_name": "formal1-bucket",
 	  "remote": true
     }
-	],
-	"d1_databases": [
-  {
-    "binding": "DB",
-    "database_name": "formal1_db",
-    "database_id": "a9f51f95-c732-4ad9-9960-55bded33361c",
-"remote": true
-  }
-]
+	]
 }

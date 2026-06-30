@@ -1,21 +1,21 @@
 import { Hono } from "hono";
+import { queryD1 } from "./lib/d1-read";
 
 type Bindings = {
   BUCKET_GALERI: R2Bucket;
-  DB: D1Database; // Menambahkan binding untuk Cloudflare D1 Database
+  D1_READ_TOKEN: string;
+  CF_ACCOUNT_ID: string;   // ← tambah
+  CF_DATABASE_ID: string;  // ← tambah
 };
-
 const app = new Hono<{ Bindings: Bindings }>();
 
 app.get("/api/", (c) => {
   return c.json({ name: "Hono Backend Aktif!" });
 });
 
-// --- ENDPOINT BARU UNTUK MENGAMBIL BERITA ---
+// --- ENDPOINT BERITA (read-only via Cloudflare API) ---
 app.get("/api/berita", async (c) => {
   try {
-    // Query untuk mengambil artikel milik lembaga_id = 1
-    // Menggunakan sub-query ke tabel 'baris' (urutan pertama) untuk dijadikan ringkasan text
     const query = `
       SELECT 
         a.artikel_id as id, 
@@ -26,11 +26,14 @@ app.get("/api/berita", async (c) => {
       WHERE a.lembaga_id = 1
       ORDER BY a.tanggal_dibuat DESC
     `;
-    
-    // Mengeksekusi query di Cloudflare D1
-    const { results } = await c.env.DB.prepare(query).all();
-    
-    // Mengembalikan data sebagai JSON
+
+    const { results } = await queryD1(
+  c.env.D1_READ_TOKEN,
+  c.env.CF_ACCOUNT_ID,
+  c.env.CF_DATABASE_ID,
+  query
+);
+
     return c.json(results);
   } catch (error) {
     console.error("Database Error:", error);
@@ -38,7 +41,7 @@ app.get("/api/berita", async (c) => {
   }
 });
 
-// --- ENDPOINT R2 YANG DIPERBAIKI (MENDUKUNG FOLDER) ---
+// --- ENDPOINT R2 (tidak berubah) ---
 app.get("/api/assets/*", async (c) => {
   const url = new URL(c.req.url);
   const objectKey = decodeURIComponent(url.pathname.replace("/api/assets/", ""));
